@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Hello World
+// @name        siriust.ru fixes
 // @namespace   _
 // @include     http://siriust.ru/*
 // @include     https://siriust.ru/*

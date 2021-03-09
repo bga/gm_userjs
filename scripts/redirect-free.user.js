@@ -11,9 +11,6 @@
 // @compatible      Greasemonkey
 // ==/UserScript==
 
-// @_include         *
-// @_namespace       http://www.example.url/to/your-web-site/
-
 //# replaces redirect link to original. Simple antitracking
 !(function(global) {
   const log = 1 ? GM_log : function() {  }
@@ -83,8 +80,7 @@
     var oldHref
     do {
       href = transform(oldHref = href)
-    }
-    while(oldHref != href);
+    } while(oldHref != href);
     
     if(href != origHref) {
       a.setAttribute("href", href)

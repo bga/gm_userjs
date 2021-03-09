@@ -67,24 +67,28 @@
     };
     1 && log("url ", href)
 
-    for(;;) {
-      var matchesCount = 0
+    const transform = function(href) {
       var j = -1, r = null; while((r = redirects[++j]) != null) {
         var match = r[0].exec(href)
         
         if(match != null) {  
           log("match ", match)
           href = r[1](match)
-          log("href ", href)
-          a.setAttribute('href', href)
-          matchesCount += 1;
         };
       }
-      
-      if(matchesCount == 0) {
-        break
-      };
+      return href
     }
+    
+    var origHref = href
+    var oldHref
+    do {
+      href = transform(oldHref = href)
+    }
+    while(oldHref != href);
+    
+    if(href != origHref) {
+      a.setAttribute("href", href)
+    };
   }
   
   document.addEventListener('touchstart', onAEvent, true)

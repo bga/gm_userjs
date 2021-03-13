@@ -21,8 +21,10 @@ function addNewStyle(newStyle) {
 }
 
 
-addNewStyle('html, body {display: block !important;}')
-document.documentElement.classList.remove("cookies");
+document.addEventListener("DOMContentLoaded", function() {
+  addNewStyle('html, body {display: block !important;}')
+  document.documentElement.classList.remove("cookies");
+}, false)
 
 // document.documentElement.style.display = "block"
 // document.documentElement.style.visibility = "visible"

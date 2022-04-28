@@ -13,7 +13,7 @@
 
 //# replaces redirect link to original. Simple antitracking
 !(function(global) {
-  const log = 1 ? GM_log : function() {  }
+  const log = 1 ? ((typeof(GM_log) == "function") ? GM_log : null) || ((typeof(console) == "object" && typeof(console.log) == "function") ? function() { console.log.apply(console, arguments) } : null) || function() {  } : function() {  }
   
   const WIN1251_CODE_PAGE_HALF = "ЂЃ‚ѓ„…†‡€‰Љ‹ЊЌЋЏђ‘’“”•–— ™љ›њќћџ\xA0ЎўЈ¤Ґ¦§Ё©Є«¬\xAD®Ї°±Ііґµ¶·ё№є»јЅѕїАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя"
   var convert8BitText = function(t, codepage) {

@@ -15,12 +15,18 @@
 !(function(global) {
   const log = 1 ? GM_log : function() {  }
   
-  const parseQueryString = function(s) {
+  const WIN1251_CODE_PAGE_HALF = "ЂЃ‚ѓ„…†‡€‰Љ‹ЊЌЋЏђ‘’“”•–— ™љ›њќћџ\xA0ЎўЈ¤Ґ¦§Ё©Є«¬\xAD®Ї°±Ііґµ¶·ё№є»јЅѕїАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюя"
+  var convert8BitText = function(t, codepage) {
+    return t.replace(/[\x80-\xFF]/g, function(c) {
+      return codepage.charAt(c.charCodeAt(0) - 128)
+    })
+  }
+  const parseQueryString = function(s, unescapeParam) { (unescapeParam == null) && (unescapeParam = decodeURIComponent);
     var $r = {  }
     s.split("&").forEach(function(kAndV) {
       var k = kAndV.split("=")[0]
       var v = kAndV.split("=")[1]
-      $r[k] = decodeURIComponent(v)
+      $r[k] = unescapeParam(v)
     })
     return $r
   }
@@ -37,7 +43,19 @@
     }],
     //# { "https://m.vk.com/away.php?to=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DKbQFboIEMcI&post=6666666_66" }
     [/^(?:https?:\/\/)?(?:www\.)?(?:m\.)?vk\.(?:com)\/away.php\?([\s\S]*)$/, function(match) { 
-      var qso = parseQueryString(match[1])
+      var unescapeUtf8OrWin1251 = function(t) {
+        try { 
+          return decodeURIComponent(t) 
+        } catch(err) {
+          if(Object(err) instanceof URIError) {
+            return convert8BitText(unescape(t), WIN1251_CODE_PAGE_HALF)
+          }
+          else {
+            throw err
+          }
+        }
+      }
+      var qso = parseQueryString(match[1], unescapeUtf8OrWin1251)
       return qso["to"]; 
     }],
     [/^(?:http:\/\/)?forum\.funkysouls\.com\/go\.php\?([^&]*)/, function(match) { 
